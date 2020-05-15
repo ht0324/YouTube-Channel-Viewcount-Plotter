@@ -3,10 +3,11 @@ import re
 import urllib.request
 import matplotlib.pyplot as plt
 import csv
+import sys
 
 # from pytube import YouTube
 
-api_key = None
+api_key = sys.argv[1]
 channelname=None
 maxResults=None
 def getUploadsPlaylist():
