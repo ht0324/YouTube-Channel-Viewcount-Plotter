@@ -6,7 +6,7 @@ import csv
 
 # from pytube import YouTube
 
-api_key = "AIzaSyCFz_mD6HVPoaICeveS-SrIxrBqJ98kslo"
+api_key = None
 channelname=None
 maxResults=None
 def getUploadsPlaylist():
