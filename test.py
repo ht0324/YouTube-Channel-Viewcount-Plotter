@@ -7,7 +7,8 @@ import sys
 
 # from pytube import YouTube
 
-api_key = sys.argv[1]
+#api_key = sys.argv[1]
+api_key = "AIzaSyCFz_mD6HVPoaICeveS-SrIxrBqJ98kslo"
 channelname=None
 maxResults=None
 def getUploadsPlaylist():
@@ -21,14 +22,14 @@ def getUploadsPlaylist():
 #    json_url = urllib.request.urlopen(url)
     return json.loads(urllib.request.urlopen(url).read())
     
-def processData(data):
+def processData(data,type):
     dataList=[]
     for i in data["items"]:
         video=i["snippet"]["resourceId"]["videoId"]
         url =f"https://www.googleapis.com/youtube/v3/videos?id={video}&part=snippet,statistics&key={api_key}"
         data = json.loads(urllib.request.urlopen(url).read())
-    #    print(data["items"][0]["statistics"])
-        views = int(data["items"][0]["statistics"]["viewCount"])
+        print(data["items"][0]["statistics"])
+        views = int(data["items"][0]["statistics"][type])
         dataList.append(views)
     return dataList
 
@@ -50,8 +51,11 @@ def main():
     channelname="unboxtherapy"
 #    channelname=input()
     data=getUploadsPlaylist()
-    dataList=processData(data)
-    printGraph(dataList)
+    view=processData(data,"viewCount")
+    like=processData(data,"likeCount")
+    dislike=processData(data,"dislikeCount")
+    comment=processData(data,"commentCount")
+#    printGraph(view)
     
 if __name__ == "__main__":
     main()
