@@ -5,41 +5,38 @@ import re
 import urllib.request
 
 
-Username = None
-channel_name = None
+class Channel:
 
-class channel:
-    def __init__(self, Username):
-        self.api_key = ""
+    def __init__(self, username):
+        self.api_key = "AIzaSyCFz_mD6HVPoaICeveS-SrIxrBqJ98kslo"
         self.max_result=25
 
         if self.api_key == "":
             print("please type your Youtube_API_Key: ")
-            api_key = input()
-        self.Username=Username
+            self.api_key = input()
+        self.username=username
         uploads_playlist = self.get_uploads_playlist()
+
+        self.video_id_list = []
         self.get_videos()
 
     def get_uploads_playlist(self):
-        global channel_name
-        url = f"https://www.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&forUsername={self.Username}&key={self.api_key}"
+        url = f"https://www.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&forUsername={self.username}&key={self.api_key}"
 
         json_url = urllib.request.urlopen(url)
         self.channel_raw_data = json.loads(json_url.read())
-        channel_name = self.channel_raw_data["items"][0]["snippet"]["title"]
+        self.channel_name = self.channel_raw_data["items"][0]["snippet"]["title"]
         uploads = self.channel_raw_data["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
         url = f"https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2CcontentDetails&max_results={str(self.max_result)}&playlistId={uploads}&key={self.api_key}"
 
         self.uploads_playlist = json.loads(urllib.request.urlopen(url).read())
 
     def get_videos(self):
-        video_id_list = []
         for video in self.uploads_playlist["items"]:
             video_id = video["snippet"]["resourceId"]["videoId"]
             url = f"https://www.googleapis.com/youtube/v3/videos?id={video_id}&part=snippet,statistics&key={self.api_key}"
             channel_raw_data = json.loads(urllib.request.urlopen(url).read())
-            video_id_list.append(channel_raw_data)
-        self.video_id_list=video_id_list
+            self.video_id_list.append(channel_raw_data)
         
     def print_graph(self, *argv):
         x = 0
@@ -53,7 +50,7 @@ class channel:
             plt.plot(xlist,list(map(int,args.data_list)),label=args.type)
         plt.xlabel("video_id No.")
         plt.ylabel("View count")
-        plt.title("YouTube Channel: " + channel_name)
+        plt.title("YouTube Channel: " + self.channel_name)
         plt.legend()
         
         plt.subplot(212)
@@ -65,7 +62,7 @@ class channel:
         plt.legend()
         
         plt.subplots_adjust(left=0.08, bottom=0.00, right=0.93, top=0.90,wspace=0.20,hspace=0.25)
-        plt.savefig(f"{self.Username}.png")
+        plt.savefig(f"{self.username}.png")
         plt.close()
         
         
@@ -79,11 +76,9 @@ class video_data:
 
 
 def main():
-    global Username
-    
     print("please type the YouTube channel ID that you want to view: ")
-    Username = input()
-    input_channel = channel(Username)
+    username = input()
+    input_channel = Channel(username)
     video_list = input_channel.video_id_list
     view = video_data(video_list,"viewCount")
     like = video_data(video_list,"likeCount")
