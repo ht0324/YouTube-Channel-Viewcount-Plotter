@@ -4,7 +4,7 @@ import json
 import socketserver
 
 import YouTube_channel_graph_plotter as result
-PORT = 8004
+PORT = 8000
 
 class Handler(http.server.SimpleHTTPRequestHandler):
 
@@ -15,8 +15,6 @@ class Handler(http.server.SimpleHTTPRequestHandler):
         if self.path == '/':
             with open('index.html', 'rb') as file: 
                 self.wfile.write(file.read())
-        if self.path == '/hello':
-            self.wfile.write(b'Hello yourself!')
         return
 
     def do_POST(self):
@@ -33,17 +31,14 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             key_val = string_response.split('=')
             key, val = key_val[0], key_val[1]
             
-#            result.main(val)
             Username = val
-            input_channel = result.channel(Username)
+            input_channel = result.Channel(Username)
             video_list = input_channel.video_id_list
             view = result.video_data(video_list,"viewCount")
             like = result.video_data(video_list,"likeCount")
             dislike = result.video_data(video_list,"dislikeCount")
             comment = result.video_data(video_list,"commentCount")
             input_channel.print_graph(view, like, dislike, comment)
-            
-            print(f'key:{key}, val: {val}')
                 
             with open(f"{val}.png", 'rb') as file:
                 self.wfile.write(file.read())
