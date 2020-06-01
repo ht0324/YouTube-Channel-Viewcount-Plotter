@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 import re
 import urllib.request
 
-
 class Channel:
 
     def __init__(self, username):
@@ -85,6 +84,7 @@ def main():
     dislike = video_data(video_list,"dislikeCount")
     comment = video_data(video_list,"commentCount")
     input_channel.print_graph(view, like, dislike, comment)
+
 
     
 if __name__ == "__main__":
