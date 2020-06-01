@@ -10,7 +10,7 @@ channel_name = None
 
 class channel:
     def __init__(self, Username):
-        self.api_key = "AIzaSyCFz_mD6HVPoaICeveS-SrIxrBqJ98kslo"
+        self.api_key = ""
         self.max_result=25
 
         if self.api_key == "":
