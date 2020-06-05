@@ -7,7 +7,7 @@ import urllib.request
 class Channel:
 
     def __init__(self, username):
-        self.api_key = "AIzaSyCFz_mD6HVPoaICeveS-SrIxrBqJ98kslo"
+        self.api_key = ""
         self.max_result=25
 
         if self.api_key == "":
